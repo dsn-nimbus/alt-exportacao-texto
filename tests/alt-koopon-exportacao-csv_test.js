@@ -37,7 +37,11 @@ describe('alt.koopon.exportacao-csv', function() {
   describe('onClick', function() {
     it('deve funcionar corretamente ao ser clicada', function() {
       _scope.cb = function() {
-        return [1, 2, 3];
+        return {
+          info: [{x: 1, y: 2, z: 3}],
+          titulos: ['a', 'b', 'c'],
+          propriedades: ['x', 'y', 'z']
+        };
       };
 
       _scope.nome = 'meu_arquivo.csv';
