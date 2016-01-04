@@ -7,8 +7,31 @@
 
     var _link = function(scope, element, attrs) {
       element.on('click', function() {
-        var _csvRows = scope.preparaInfo();
-        var _csvString = _csvRows.join("%0A");
+        var _info = scope.preparaInfo();
+
+        var _csv = [_info.titulos];
+        var _propriedades = _info.propriedades;
+        var _listagem = _info.info;
+        var _listagemFinal = [];
+
+        angular.forEach(_listagem, function(informacao) {
+          var _valores = [];
+
+          angular.forEach(_propriedades, function(prop) {
+
+            if (informacao[prop]) {
+              _valores = _valores.concat(informacao[prop]);
+            }
+          });
+
+          _csv.push(_valores);
+        });
+
+        angular.forEach(_csv, function(linha, indice) {
+          _listagemFinal.push(linha.join(','));
+        });
+
+        var _csvString = _listagemFinal.join("%0A");
 
         var _a = document.createElement('a');
 

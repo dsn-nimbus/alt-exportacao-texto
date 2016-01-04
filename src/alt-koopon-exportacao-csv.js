@@ -14,10 +14,11 @@
         var _listagem = _info.info;
         var _listagemFinal = [];
 
-        angular.forEach(_propriedades, function(prop) {
+        angular.forEach(_listagem, function(informacao) {
           var _valores = [];
 
-          angular.forEach(_listagem, function(informacao) {
+          angular.forEach(_propriedades, function(prop) {
+
             if (informacao[prop]) {
               _valores = _valores.concat(informacao[prop]);
             }
