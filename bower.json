@@ -1,0 +1,33 @@
+{
+  "name": "alt-koopon-exportacao-csv",
+  "main": "dist/alt-koopon-exportacao-csv.min.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/dsn-nimbus/alt-koopon-exportacao-csv.git",
+  "authors": [
+    "dsn-nimbus <ericdantas0@gmail.com>"
+  ],
+  "description": "desc",
+  "keywords": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    ".idea",
+    ".gitignore",
+    "node_modules",
+    "tests",
+    "src",
+    "LICENSE",
+    "bower_components",
+    "coverage",
+    "gulpfile.js",
+    "package.json",
+    "*.conf.js"
+  ],
+  "dependencies": {
+    "angular": ">=1.0.8"
+  },
+  "devDependencies": {
+    "angular-mocks": ">=1.0.8",
+    "jquery": "~2.1.4"
+  }
+}
