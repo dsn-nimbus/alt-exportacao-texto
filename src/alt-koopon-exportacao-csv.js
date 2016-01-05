@@ -6,12 +6,10 @@
     var _restrict = 'A';
 
     var _link = function(scope, element, attrs) {
-      element.on('click', function() {
-        var _info = scope.preparaInfo();
-
-        var _csv = [_info.titulos];
-        var _propriedades = _info.propriedades;
-        var _listagem = _info.info;
+      function _preparaCsv(info) {
+        var _csv = [info.titulos];
+        var _propriedades = info.propriedades;
+        var _listagem = info.info;
         var _listagemFinal = [];
 
         angular.forEach(_listagem, function(informacao) {
@@ -31,19 +29,26 @@
           _listagemFinal.push(linha.join(','));
         });
 
-        var _csvString = _listagemFinal.join("%0A");
+        return _listagemFinal.join("%0A");
+      }
 
+      function _exporta(csv, nomeArquivo) {
         var _a = document.createElement('a');
 
-        _a.href = 'data:attachment/csv,' + _csvString;
+        _a.href = 'data:attachment/csv,' + csv;
         _a.target = '_blank';
-        _a.download = scope.nomeArquivo;
+        _a.download = nomeArquivo;
 
         document.body.appendChild(_a);
 
         _a.click();
 
         document.body.removeChild(_a);
+      }
+
+      element.on('click', function() {
+        var _csv = _preparaCsv(scope.preparaInfo());
+        _exporta(_csv, scope.nomeArquivo);
       });
     };
 
