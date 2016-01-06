@@ -15,8 +15,9 @@ describe('alt.koopon.exportacao-csv', function() {
     beforeEach(function() {
       _scope.cb = function() {};
       _scope.n = 'nome.123.csv';
+      _scope.t = 'txt';
 
-      var _html = '<div alt-koopon-exportacao-csv prepara-info="cb()" nome-arquivo="{{n}}"></div>';
+      var _html = '<div alt-koopon-exportacao-csv prepara-info="cb()" nome-arquivo="{{n}}" tipo-arquivo="{{t}}"></div>';
 
       _element = angular.element(_html);
       _compile(_element)(_scope);
@@ -31,6 +32,7 @@ describe('alt.koopon.exportacao-csv', function() {
     it('deve ter nome e preparaInfo definidos', function() {
       expect(typeof _element.isolateScope().preparaInfo).toEqual("function");
       expect(_element.isolateScope().nomeArquivo).toEqual(_scope.n);
+      expect(_element.isolateScope().tipoArquivo).toEqual(_scope.t);
     });
   })
 
