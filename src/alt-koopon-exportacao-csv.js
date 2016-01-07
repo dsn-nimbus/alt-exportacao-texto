@@ -8,6 +8,11 @@
     var _link = function(scope, element, attrs) {
       scope.tipoArquivo = scope.tipoArquivo || 'csv';
 
+      element.on('click', function() {
+        var _info = _preparaMatriz(scope.preparaInfo());
+        _exporta(_info, scope.nomeArquivo);
+      });
+
       function _preparaMatriz(info) {
         var _matriz = [];
         var _titulos = scope.titulos;
@@ -15,6 +20,9 @@
         var _propriedades = info.propriedades;
         var _listagem = info.info;
         var _listagemFinal = [];
+        var VALOR_MONETARIO_PATTERN = /\d+\.\d{2}/;
+        var FIM_DE_LINHA_CODIFICADO = '%0A';
+        var ESPACO_STRING_CODIFICADO = '%20';
 
         if (scope.titulos) {
           _matriz.push(_titulos);
@@ -34,8 +42,8 @@
                     if (_arquivoContabil) {
                       _valor = "\"" + _valor + "\"";
 
-                      _valor = /\d+\.\d{2}/.test(_valor) ? "\"" + /\d+\.\d{2}/.exec(_valor).join().replace(".", ",") + "\""
-                                                         : _valor;
+                      _valor = VALOR_MONETARIO_PATTERN.test(_valor) ? "\"" + VALOR_MONETARIO_PATTERN.exec(_valor).join().replace(".", ",") + "\""
+                                                                    : _valor;
                     }
                   }
 
@@ -50,7 +58,7 @@
           _listagemFinal.push(linha.join(','));
         });
 
-        return _listagemFinal.join("%0A");
+        return _listagemFinal.join(FIM_DE_LINHA_CODIFICADO).replace(/ /g, ESPACO_STRING_CODIFICADO);
       }
 
       function _exporta(info, nomeArquivo) {
@@ -67,10 +75,6 @@
         document.body.removeChild(_a);
       }
 
-      element.on('click', function() {
-        var _info = _preparaMatriz(scope.preparaInfo());
-        _exporta(_info, scope.nomeArquivo);
-      });
     };
 
     var _scope = {
