@@ -2,15 +2,42 @@
   "use strict";
 
   ng.module('alt.koopon.exportacao-csv', [])
+  .factory('AltKooponExportacaoParser', [function() {
+    var AltKooponExportacaoParser = function(arquivoContabil) {
+
+    };
+
+    AltKooponExportacaoParser.prototype.parseCsvNormal = function() {
+
+    };
+
+    AltKooponExportacaoParser.prototype.parseArquivoContabilPack = function() {
+
+    };
+
+    return AltKooponExportacaoParser;
+  }])
+  .factory('AltKooponExportacaoExec', [function() {
+    var AltKooponExportacaoExec = function(doc) {
+
+    };
+
+    AltKooponExportacaoExec.prototype.exporta = function(info, nomeArquivo, tipoArquivo) {
+
+    };
+
+    return AltKooponExportacaoExec;
+  }])
   .directive('altKooponExportacaoCsv', [function() {
     var _restrict = 'A';
 
     var _link = function(scope, element, attrs) {
-      scope.tipoArquivo = scope.tipoArquivo || 'csv';
+      var _tipoArquivo = scope.tipoArquivo || 'csv';
+      var _nomeArquivo = scope.nomeArquivo || 'Exportação';
 
       element.on('click', function() {
         var _info = _preparaMatriz(scope.preparaInfo());
-        _exporta(_info, scope.nomeArquivo);
+        _exporta(_info, _nomeArquivo, _tipoArquivo);
       });
 
       function _preparaMatriz(info) {
@@ -28,10 +55,10 @@
           _matriz.push(_titulos);
         }
 
-        angular.forEach(_listagem, function(informacao) {
+        ng.forEach(_listagem, function(informacao) {
           var _valores = [];
 
-          angular.forEach(_propriedades, function(prop) {
+          ng.forEach(_propriedades, function(prop) {
               if (ng.isDefined(informacao[prop])) {
                   var _valor = informacao[prop];
 
@@ -54,17 +81,17 @@
           _matriz.push(_valores);
         });
 
-        angular.forEach(_matriz, function(linha, indice) {
+        ng.forEach(_matriz, function(linha, indice) {
           _listagemFinal.push(linha.join(','));
         });
 
         return _listagemFinal.join(FIM_DE_LINHA_CODIFICADO).replace(/ /g, ESPACO_STRING_CODIFICADO);
       }
 
-      function _exporta(info, nomeArquivo) {
+      function _exporta(info, nomeArquivo, tipoArquivo) {
         var _a = document.createElement('a');
 
-        _a.href = 'data:attachment/' + scope.tipoArquivo + ',' + info;
+        _a.href = 'data:attachment/' + tipoArquivo + ',' + info;
         _a.target = '_blank';
         _a.download = nomeArquivo;
 
@@ -74,7 +101,6 @@
 
         document.body.removeChild(_a);
       }
-
     };
 
     var _scope = {
@@ -91,4 +117,4 @@
     };
 
   }]);
-}(angular));
+}(window.angular));
