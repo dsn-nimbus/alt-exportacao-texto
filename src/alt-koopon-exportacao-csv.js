@@ -2,105 +2,119 @@
   "use strict";
 
   ng.module('alt.koopon.exportacao-csv', [])
-  .factory('AltKooponExportacaoParser', [function() {
-    var AltKooponExportacaoParser = function(arquivoContabil) {
-
+  .factory('AltKooponExportacaoModel', [function() {
+    var AltKooponExportacaoModel = function(titulos, propriedades, info, arquivoContabil) {
+      this.titulos = titulos || undefined;
+      this.propriedades = propriedades || [];
+      this.info = info || [];
+      this.arquivoContabil = arquivoContabil || false;
     };
 
-    AltKooponExportacaoParser.prototype.parseCsvNormal = function() {
+    return AltKooponExportacaoModel;
+  }])
+  .factory('AltKooponExportacaoParser', ['AltKooponExportacaoModel', function(AltKooponExportacaoModel) {
+    var AltKooponExportacaoParser = function(expModelo) {
+      if (!(expModelo instanceof AltKooponExportacaoModel)) {
+        return this.expModelo = new AltKooponExportacaoModel();
+      }
 
+      this.expModelo = expModelo;
     };
 
-    AltKooponExportacaoParser.prototype.parseArquivoContabilPack = function() {
+    AltKooponExportacaoParser.prototype.parseArquivo = function() {
+      var _matriz = [];
+      var _titulos = this.expModelo.titulos;
+      var _propriedades = this.expModelo.propriedades;
+      var _listagem = this.expModelo.info;
+      var _arquivoContabil = !!this.expModelo.arquivoContabil;
+      var _listagemFinal = [];
+      var VALOR_MONETARIO_PATTERN = /\d+\.\d{1,2}/;
+      var FIM_DE_LINHA_CODIFICADO = '%0A';
+      var ESPACO_STRING_CODIFICADO = '%20';
 
+      if (_titulos) {
+        _matriz.push(_titulos);
+      }
+
+      ng.forEach(_listagem, function(informacao) {
+        var _valores = [];
+
+        ng.forEach(_propriedades, function(prop) {
+          if (ng.isDefined(informacao[prop])) {
+            var _valor = informacao[prop];
+
+            if (_valor === "") {
+              _valor = "\"\"";
+            }
+            else {
+              if (_arquivoContabil) {
+                _valor = "\"" + _valor + "\"";
+
+                if (VALOR_MONETARIO_PATTERN.test(_valor) && /valor/.test(prop)) {
+                  _valor = "\"" + VALOR_MONETARIO_PATTERN.exec(_valor).join().replace(".", ",") + "\"";
+                }
+                else {
+                  _valor = _valor;
+                }
+              }
+            }
+
+            _valores.push(_valor);
+          }
+        });
+
+        _matriz.push(_valores);
+      });
+
+      ng.forEach(_matriz, function(linha, indice) {
+        _listagemFinal.push(linha.join(','));
+      });
+
+      return _listagemFinal.join(FIM_DE_LINHA_CODIFICADO).replace(/ /g, ESPACO_STRING_CODIFICADO);
     };
 
     return AltKooponExportacaoParser;
   }])
   .factory('AltKooponExportacaoExec', [function() {
     var AltKooponExportacaoExec = function(doc) {
-
+      this.document = doc;
     };
 
     AltKooponExportacaoExec.prototype.exporta = function(info, nomeArquivo, tipoArquivo) {
+      var _a = this.document.createElement('a');
 
+      _a.href = 'data:attachment/' + tipoArquivo + ',' + info;
+      _a.target = '_blank';
+      _a.download = nomeArquivo;
+
+      this.document.body.appendChild(_a);
+
+      _a.click();
+
+      this.document.body.removeChild(_a);
     };
 
     return AltKooponExportacaoExec;
   }])
-  .directive('altKooponExportacaoCsv', [function() {
+  .directive('altKooponExportacaoCsv', ['AltKooponExportacaoModel', 'AltKooponExportacaoParser', 'AltKooponExportacaoExec', function(AltKooponExportacaoModel, AltKooponExportacaoParser, AltKooponExportacaoExec) {
     var _restrict = 'A';
 
     var _link = function(scope, element, attrs) {
       var _tipoArquivo = scope.tipoArquivo || 'csv';
       var _nomeArquivo = scope.nomeArquivo || 'Exportação';
 
+      var _parser = null;
+      var _modelo = null;
+      var _exec = new AltKooponExportacaoExec(document);
+
       element.on('click', function() {
-        var _info = _preparaMatriz(scope.preparaInfo());
-        _exporta(_info, _nomeArquivo, _tipoArquivo);
+        var _info = scope.preparaInfo();
+
+        _modelo = new AltKooponExportacaoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil);
+        _parser = new AltKooponExportacaoParser(_modelo);
+
+        _exec.exporta(_parser.parseArquivo(), _nomeArquivo, _tipoArquivo);
       });
-
-      function _preparaMatriz(info) {
-        var _matriz = [];
-        var _titulos = scope.titulos;
-        var _arquivoContabil = !!scope.arquivoContabil;
-        var _propriedades = info.propriedades;
-        var _listagem = info.info;
-        var _listagemFinal = [];
-        var VALOR_MONETARIO_PATTERN = /\d+\.\d{2}/;
-        var FIM_DE_LINHA_CODIFICADO = '%0A';
-        var ESPACO_STRING_CODIFICADO = '%20';
-
-        if (scope.titulos) {
-          _matriz.push(_titulos);
-        }
-
-        ng.forEach(_listagem, function(informacao) {
-          var _valores = [];
-
-          ng.forEach(_propriedades, function(prop) {
-              if (ng.isDefined(informacao[prop])) {
-                  var _valor = informacao[prop];
-
-                  if (_valor === "") {
-                    _valor = "\"\"";
-                  }
-                  else {
-                    if (_arquivoContabil) {
-                      _valor = "\"" + _valor + "\"";
-
-                      _valor = VALOR_MONETARIO_PATTERN.test(_valor) ? "\"" + VALOR_MONETARIO_PATTERN.exec(_valor).join().replace(".", ",") + "\""
-                                                                    : _valor;
-                    }
-                  }
-
-                  _valores.push(_valor);
-              }
-          });
-
-          _matriz.push(_valores);
-        });
-
-        ng.forEach(_matriz, function(linha, indice) {
-          _listagemFinal.push(linha.join(','));
-        });
-
-        return _listagemFinal.join(FIM_DE_LINHA_CODIFICADO).replace(/ /g, ESPACO_STRING_CODIFICADO);
-      }
-
-      function _exporta(info, nomeArquivo, tipoArquivo) {
-        var _a = document.createElement('a');
-
-        _a.href = 'data:attachment/' + tipoArquivo + ',' + info;
-        _a.target = '_blank';
-        _a.download = nomeArquivo;
-
-        document.body.appendChild(_a);
-
-        _a.click();
-
-        document.body.removeChild(_a);
-      }
     };
 
     var _scope = {
