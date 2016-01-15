@@ -100,14 +100,13 @@
     var _restrict = 'A';
 
     var _link = function(scope, element, attrs) {
-      var _tipoArquivo = scope.tipoArquivo || 'csv';
-      var _nomeArquivo = scope.nomeArquivo || 'Exportação';
-
       var _parser = null;
       var _modelo = null;
       var _exec = new AltKooponExportacaoExec(document);
 
       element.on('click', function() {
+        var _tipoArquivo = scope.tipoArquivo || 'csv';
+        var _nomeArquivo = scope.nomeArquivo || 'Exportação';
         var _info = scope.preparaInfo();
 
         _modelo = new AltKooponExportacaoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil);

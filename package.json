@@ -1,6 +1,6 @@
 {
   "name": "alt-koopon-exportacao-csv",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "dist/alt-koopon-exportacao-csv.min.js",
   "scripts": {
     "test": "gulp coverage"
