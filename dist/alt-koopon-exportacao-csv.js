@@ -83,7 +83,7 @@
     AltKooponExportacaoExec.prototype.exporta = function(info, nomeArquivo, tipoArquivo) {
       var _a = this.document.createElement('a');
 
-      _a.href = 'data:attachment/' + tipoArquivo + ',' + info;
+      _a.href = 'data:attachment/' + tipoArquivo + ';charset=utf-8,%EF%BB%BF' + info;
       _a.target = '_blank';
       _a.download = nomeArquivo;
 

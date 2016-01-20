@@ -289,7 +289,7 @@ describe('alt.koopon.exportacao-csv', function() {
 
           _exec.exporta(_info, _nomeArquivo, _tipoArquivo);
 
-          expect(_a.href).toBe('data:attachment/' + _tipoArquivo + ',' + _info)
+          expect(_a.href).toBe('data:attachment/' + _tipoArquivo + ';charset=utf-8,%EF%BB%BF' + _info)
           expect(_a.target).toBe('_blank');
           expect(_a.download).toBe(_nomeArquivo);
 
