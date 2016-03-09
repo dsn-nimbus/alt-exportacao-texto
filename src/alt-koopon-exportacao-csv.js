@@ -117,7 +117,7 @@
         var _nomeArquivo = scope.nomeArquivo || 'Exportação';
         var _info = scope.preparaInfo();
 
-        _modelo = new AltKooponExportacaoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil);
+        _modelo = new AltKooponExportacaoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil, _info.infoNaoTabelada);
         _parser = new AltKooponExportacaoParser(_modelo);
 
         _exec.exporta(_parser.parseArquivo(), _nomeArquivo, _tipoArquivo);
