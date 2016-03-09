@@ -3,8 +3,9 @@
 
   ng.module('alt.koopon.exportacao-csv', [])
   .factory('AltKooponExportacaoModel', [function() {
-    var AltKooponExportacaoModel = function(titulos, propriedades, info, arquivoContabil) {
+    var AltKooponExportacaoModel = function(titulos, propriedades, info, arquivoContabil, infoNaoTabelada) {
       this.titulos = titulos || undefined;
+      this.infoNaoTabelada = infoNaoTabelada || undefined;
       this.propriedades = propriedades || [];
       this.info = info || [];
       this.arquivoContabil = arquivoContabil || false;
@@ -24,6 +25,7 @@
     AltKooponExportacaoParser.prototype.parseArquivo = function() {
       var _matriz = [];
       var _titulos = this.expModelo.titulos;
+      var _infoNaoTabelada = this.expModelo.infoNaoTabelada;
       var _propriedades = this.expModelo.propriedades;
       var _listagem = this.expModelo.info;
       var _arquivoContabil = !!this.expModelo.arquivoContabil;
@@ -31,6 +33,15 @@
       var VALOR_MONETARIO_PATTERN = /\d+\.\d{1,2}/;
       var FIM_DE_LINHA_CODIFICADO = '%0A';
       var ESPACO_STRING_CODIFICADO = '%20';
+
+      if (_infoNaoTabelada) {
+        _infoNaoTabelada.forEach(function(inf) {
+          _matriz.push(inf);
+        });
+
+        // espaçamento entre a informação não tabelada e a tabela
+        _matriz.push([''], [''], ['']);
+      }
 
       if (_titulos) {
         _matriz.push(_titulos);
@@ -52,9 +63,6 @@
 
                 if (VALOR_MONETARIO_PATTERN.test(_valor) && /valor/.test(prop)) {
                   _valor = "\"" + VALOR_MONETARIO_PATTERN.exec(_valor).join().replace(".", ",") + "\"";
-                }
-                else {
-                  _valor = _valor;
                 }
               }
             }

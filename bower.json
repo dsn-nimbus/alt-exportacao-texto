@@ -1,7 +1,7 @@
 {
   "name": "alt-koopon-exportacao-csv",
   "main": "dist/alt-koopon-exportacao-csv.min.js",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "homepage": "https://github.com/dsn-nimbus/alt-koopon-exportacao-csv.git",
   "authors": [
     "dsn-nimbus <ericdantas0@gmail.com>"
@@ -24,10 +24,13 @@
     "*.conf.js"
   ],
   "dependencies": {
-    "angular": ">=1.0.8"
+    "angular": "1.4"
   },
   "devDependencies": {
     "angular-mocks": ">=1.0.8",
     "jquery": "~2.1.4"
+  },
+  "resolutions": {
+    "angular": "1.4"
   }
 }

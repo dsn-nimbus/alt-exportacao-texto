@@ -75,6 +75,7 @@ describe('alt.koopon.exportacao-csv', function() {
           var _m = new _AltKooponExportacaoModel();
 
           expect(_m.titulos).toEqual(undefined);
+          expect(_m.infoNaoTabelada).toEqual(undefined);
           expect(_m.propriedades).toEqual([]);
           expect(_m.info).toEqual([]);
           expect(_m.arquivoContabil).toEqual(false);
@@ -85,10 +86,12 @@ describe('alt.koopon.exportacao-csv', function() {
           var _propriedades = ['a', 'b'];
           var _info = 'abc';
           var _arquivoContabil = true;
+          var _infoNaoTabelada = [4, 5, 6];
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil);
+          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
 
           expect(_m.titulos).toEqual(_titulos);
+          expect(_m.infoNaoTabelada).toEqual(_infoNaoTabelada);
           expect(_m.propriedades).toEqual(_propriedades);
           expect(_m.info).toEqual(_info);
           expect(_m.arquivoContabil).toEqual(_arquivoContabil);
@@ -181,6 +184,38 @@ describe('alt.koopon.exportacao-csv', function() {
           expect(_resultadoParsed).toEqual(_resposta);
         });
 
+        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil e tem informações que não são tabeladas', function() {
+          var _titulos = [
+            'Coluna A', 'Coluna B', 'Coluna C'
+          ];
+
+          var _propriedades = [
+            'a', 'b', 'c'
+          ];
+
+          var _info = [
+            {a: 1, b: 2, c: 3},
+            {a: 4, b: 5, c: 6},
+            {a: 7, b: 8, c: 9},
+          ];
+
+          var _infoNaoTabelada = [
+            ['ae1'],
+            ['ae2'],
+            ['123456']
+          ];
+
+          var _resposta = 'ae1%0Aae2%0A123456%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C%0A1,2,3%0A4,5,6%0A7,8,9';
+
+          var _arquivoContabil = false;
+
+          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _parser = new _AltKooponExportacaoParser(_m);
+          var _resultadoParsed = _parser.parseArquivo();
+
+          expect(_resultadoParsed).toEqual(_resposta);
+        });
+
         it('deve fazer o parse corretamente - com titulos e é arquivo contábil', function() {
           var _titulos = [
             'Coluna A', 'Coluna B', 'Coluna C'
@@ -202,6 +237,40 @@ describe('alt.koopon.exportacao-csv', function() {
           var _arquivoContabil = true;
 
           var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil);
+
+          var _parser = new _AltKooponExportacaoParser(_m);
+          var _resultadoParsed = _parser.parseArquivo();
+
+          expect(_resultadoParsed).toEqual(_resposta);
+        });
+
+        it('deve fazer o parse corretamente - com titulos, é arquivo contábil e tem informações não tabeladas', function() {
+          var _titulos = [
+            'Coluna A', 'Coluna B', 'Coluna C'
+          ];
+
+          var _infoNaoTabelada = [
+            ['ae999'],
+            ['ae8888'],
+            ['yo:D']
+          ]
+
+          var _propriedades = [
+            'a', 'b', 'c', 'valor'
+          ];
+
+          var _info = [
+            {a: 1, b: 2, c: 3, valor: '1.99'},
+            {a: 4, b: 5, c: 6, valor: '1.9'},
+            {a: 7, b: 8, c: 9, valor: '0.99'},
+            {a: 10, b: 11, c: 12, valor: '1000.99'},
+          ];
+
+          var _resposta = 'ae999%0Aae8888%0Ayo:D%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C%0A"1","2","3","1,99"%0A"4","5","6","1,9"%0A"7","8","9","0,99"%0A"10","11","12","1000,99"';
+
+          var _arquivoContabil = true;
+
+          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
 
           var _parser = new _AltKooponExportacaoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
