@@ -36,6 +36,12 @@
 
       if (_infoNaoTabelada) {
         _infoNaoTabelada.forEach(function(inf) {
+          inf.forEach(function(str, indice) {
+            if (/,/g.test(str)) {
+              inf[indice] = "\""+str+"\"";
+            }
+          });
+
           _matriz.push(inf);
         });
 
