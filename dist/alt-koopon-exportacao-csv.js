@@ -65,6 +65,11 @@
                   _valor = "\"" + VALOR_MONETARIO_PATTERN.exec(_valor).join().replace(".", ",") + "\"";
                 }
               }
+              else {
+                  if (/,/g.test(_valor)) {
+                      _valor = "\""+_valor+"\"";
+                  }
+              }
             }
 
             _valores.push(_valor);
@@ -138,4 +143,4 @@
     };
 
   }]);
-}(window.angular));
+}(window.angular))
