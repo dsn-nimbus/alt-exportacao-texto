@@ -1,9 +1,9 @@
 ;(function(ng) {
   "use strict";
 
-  ng.module('alt.koopon.exportacao-csv', [])
-  .factory('AltKooponExportacaoModel', [function() {
-    var AltKooponExportacaoModel = function(titulos, propriedades, info, arquivoContabil, infoNaoTabelada) {
+  ng.module('alt.exportacao-texto', [])
+  .factory('AltExportacaoTextoModel', [function() {
+    var AltExportacaoTextoModel = function(titulos, propriedades, info, arquivoContabil, infoNaoTabelada) {
       this.titulos = titulos || undefined;
       this.infoNaoTabelada = infoNaoTabelada || undefined;
       this.propriedades = propriedades || [];
@@ -11,18 +11,18 @@
       this.arquivoContabil = arquivoContabil || false;
     };
 
-    return AltKooponExportacaoModel;
+    return AltExportacaoTextoModel;
   }])
-  .factory('AltKooponExportacaoParser', ['AltKooponExportacaoModel', function(AltKooponExportacaoModel) {
-    var AltKooponExportacaoParser = function(expModelo) {
-      if (!(expModelo instanceof AltKooponExportacaoModel)) {
-        return this.expModelo = new AltKooponExportacaoModel();
+  .factory('AltExportacaoTextoParser', ['AltExportacaoTextoModel', function(AltExportacaoTextoModel) {
+    var AltExportacaoTextoParser = function(expModelo) {
+      if (!(expModelo instanceof AltExportacaoTextoModel)) {
+        return this.expModelo = new AltExportacaoTextoModel();
       }
 
       this.expModelo = expModelo;
     };
 
-    AltKooponExportacaoParser.prototype.parseArquivo = function() {
+    AltExportacaoTextoParser.prototype.parseArquivo = function() {
       var _matriz = [];
       var _titulos = this.expModelo.titulos;
       var _infoNaoTabelada = this.expModelo.infoNaoTabelada;
@@ -92,14 +92,14 @@
       return _listagemFinal.join(FIM_DE_LINHA_CODIFICADO).replace(/ /g, ESPACO_STRING_CODIFICADO);
     };
 
-    return AltKooponExportacaoParser;
+    return AltExportacaoTextoParser;
   }])
-  .factory('AltKooponExportacaoExec', [function() {
-    var AltKooponExportacaoExec = function(doc) {
+  .factory('AltExportacaoTextoExec', [function() {
+    var AltExportacaoTextoExec = function(doc) {
       this.document = doc;
     };
 
-    AltKooponExportacaoExec.prototype.exporta = function(info, nomeArquivo, tipoArquivo) {
+    AltExportacaoTextoExec.prototype.exporta = function(info, nomeArquivo, tipoArquivo) {
       var _a = this.document.createElement('a');
 
       _a.href = 'data:attachment/' + tipoArquivo + ';charset=utf-8,%EF%BB%BF' + info;
@@ -113,23 +113,23 @@
       this.document.body.removeChild(_a);
     };
 
-    return AltKooponExportacaoExec;
+    return AltExportacaoTextoExec;
   }])
-  .directive('altKooponExportacaoCsv', ['AltKooponExportacaoModel', 'AltKooponExportacaoParser', 'AltKooponExportacaoExec', function(AltKooponExportacaoModel, AltKooponExportacaoParser, AltKooponExportacaoExec) {
+  .directive('altExportacaoTexto', ['AltExportacaoTextoModel', 'AltExportacaoTextoParser', 'AltExportacaoTextoExec', function(AltExportacaoTextoModel, AltExportacaoTextoParser, AltExportacaoTextoExec) {
     var _restrict = 'A';
 
     var _link = function(scope, element, attrs) {
       var _parser = null;
       var _modelo = null;
-      var _exec = new AltKooponExportacaoExec(document);
+      var _exec = new AltExportacaoTextoExec(document);
 
       element.on('click', function() {
         var _tipoArquivo = scope.tipoArquivo || 'csv';
         var _nomeArquivo = scope.nomeArquivo || 'Exportação';
         var _info = scope.preparaInfo();
 
-        _modelo = new AltKooponExportacaoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil, _info.infoNaoTabelada);
-        _parser = new AltKooponExportacaoParser(_modelo);
+        _modelo = new AltExportacaoTextoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil, _info.infoNaoTabelada);
+        _parser = new AltExportacaoTextoParser(_modelo);
 
         _exec.exporta(_parser.parseArquivo(), _nomeArquivo, _tipoArquivo);
       });

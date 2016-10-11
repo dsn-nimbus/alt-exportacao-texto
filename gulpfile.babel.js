@@ -9,8 +9,8 @@ import {server as karma} from 'karma';
 const _coverage = 'coverage/**/lcov.info';
 const _scripts = 'src/**/*.js';
 const _styles = 'src/**/*.css';
-const _script = 'alt-koopon-exportacao-csv.js';
-const _style = 'alt-koopon-exportacao-csv.css';
+const _script = 'alt-exportacao-texto.js';
+const _style = 'alt-exportacao-texto.css';
 const _dist = 'dist';
 
 gulp.task('build-css', () => {

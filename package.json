@@ -1,8 +1,9 @@
 {
-  "name": "alt-koopon-exportacao-csv",
-  "version": "0.0.11",
-  "main": "dist/alt-koopon-exportacao-csv.min.js",
+  "name": "alt-exportacao-texto",
+  "version": "0.0.12",
+  "main": "dist/alt-exportacao-texto.min.js",
   "scripts": {
+    "build": "gulp build",
     "test": "gulp coverage"
   },
   "dependencies": {},
@@ -27,12 +28,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dsn-nimbus/alt-koopon-exportacao-csv.git"
+    "url": "https://github.com/dsn-nimbus/alt-exportacao-texto.git"
   },
   "author": "dsn-nimbus <ericdantas0@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dsn-nimbus/alt-koopon-exportacao-csv/issues"
+    "url": "https://github.com/dsn-nimbus/alt-exportacao-texto/issues"
   },
-  "homepage": "https://github.com/dsn-nimbus/alt-koopon-exportacao-csv"
+  "homepage": "https://github.com/dsn-nimbus/alt-exportacao-texto"
 }

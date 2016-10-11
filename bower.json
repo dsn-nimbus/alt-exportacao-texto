@@ -1,8 +1,8 @@
 {
-  "name": "alt-koopon-exportacao-csv",
-  "main": "dist/alt-koopon-exportacao-csv.min.js",
-  "version": "0.0.11",
-  "homepage": "https://github.com/dsn-nimbus/alt-koopon-exportacao-csv.git",
+  "name": "alt-exportacao-texto",
+  "main": "dist/alt-exportacao-texto.min.js",
+  "version": "0.0.12",
+  "homepage": "https://github.com/dsn-nimbus/alt-exportacao-texto.git",
   "authors": [
     "dsn-nimbus <ericdantas0@gmail.com>"
   ],

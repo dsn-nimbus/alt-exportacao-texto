@@ -1,17 +1,17 @@
 "use strict";
 
-describe('alt.koopon.exportacao-csv', function() {
-  var _scope, _element, _compile, _AltKooponExportacaoParser, _AltKooponExportacaoExec, _AltKooponExportacaoModel;
+describe('alt.exportacao-texto', function() {
+  var _scope, _element, _compile, _AltExportacaoTextoParser, _AltExportacaoTextoExec, _AltExportacaoTextoModel;
 
-  beforeEach(module('alt.koopon.exportacao-csv'));
+  beforeEach(module('alt.exportacao-texto'));
 
   beforeEach(inject(function($injector) {
     _scope = $injector.get('$rootScope').$new();
     _compile = $injector.get('$compile');
 
-    _AltKooponExportacaoParser = $injector.get('AltKooponExportacaoParser');
-    _AltKooponExportacaoExec = $injector.get('AltKooponExportacaoExec');
-    _AltKooponExportacaoModel = $injector.get('AltKooponExportacaoModel');
+    _AltExportacaoTextoParser = $injector.get('AltExportacaoTextoParser');
+    _AltExportacaoTextoExec = $injector.get('AltExportacaoTextoExec');
+    _AltExportacaoTextoModel = $injector.get('AltExportacaoTextoModel');
   }));
 
   describe('directive', function() {
@@ -21,7 +21,7 @@ describe('alt.koopon.exportacao-csv', function() {
         _scope.n = 'nome.123.csv';
         _scope.t = 'txt';
 
-        var _html = '<div alt-koopon-exportacao-csv prepara-info="cb()" nome-arquivo="{{n}}" tipo-arquivo="{{t}}"></div>';
+        var _html = '<div alt-exportacao-texto prepara-info="cb()" nome-arquivo="{{n}}" tipo-arquivo="{{t}}"></div>';
 
         _element = angular.element(_html);
         _compile(_element)(_scope);
@@ -52,7 +52,7 @@ describe('alt.koopon.exportacao-csv', function() {
 
         _scope.nome = 'meu_arquivo.csv';
 
-        var _html = '<div alt-koopon-exportacao-csv prepara-info="cb()" nome="nome"></div>';
+        var _html = '<div alt-exportacao-texto prepara-info="cb()" nome="nome"></div>';
 
         _element = angular.element(_html);
         _compile(_element)(_scope);
@@ -65,14 +65,14 @@ describe('alt.koopon.exportacao-csv', function() {
   });
 
   describe('services', function() {
-    describe('AltKooponExportacaoModel', function() {
+    describe('AltExportacaoTextoModel', function() {
       describe('criação', function() {
         it('deve ser uma function', function() {
-          expect(typeof _AltKooponExportacaoModel).toBe('function');
+          expect(typeof _AltExportacaoTextoModel).toBe('function');
         });
 
         it('deve ter os valores corretos para a instância - valores default', function() {
-          var _m = new _AltKooponExportacaoModel();
+          var _m = new _AltExportacaoTextoModel();
 
           expect(_m.titulos).toEqual(undefined);
           expect(_m.infoNaoTabelada).toEqual(undefined);
@@ -88,7 +88,7 @@ describe('alt.koopon.exportacao-csv', function() {
           var _arquivoContabil = true;
           var _infoNaoTabelada = [4, 5, 6];
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
 
           expect(_m.titulos).toEqual(_titulos);
           expect(_m.infoNaoTabelada).toEqual(_infoNaoTabelada);
@@ -99,10 +99,10 @@ describe('alt.koopon.exportacao-csv', function() {
       });
     });
 
-    describe('AltKooponExportacaoParser', function() {
+    describe('AltExportacaoTextoParser', function() {
       describe('criação', function() {
         it('deve retornar uma function', function() {
-          expect(typeof _AltKooponExportacaoParser).toBe('function');
+          expect(typeof _AltExportacaoTextoParser).toBe('function');
         });
       });
 
@@ -124,9 +124,9 @@ describe('alt.koopon.exportacao-csv', function() {
 
           var _arquivoContabil = false;
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil);
 
-          var _parser = new _AltKooponExportacaoParser(_m);
+          var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
@@ -149,9 +149,9 @@ describe('alt.koopon.exportacao-csv', function() {
 
           var _arquivoContabil = false;
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil);
 
-          var _parser = new _AltKooponExportacaoParser(_m);
+          var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
@@ -176,9 +176,9 @@ describe('alt.koopon.exportacao-csv', function() {
 
           var _arquivoContabil = false;
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil);
 
-          var _parser = new _AltKooponExportacaoParser(_m);
+          var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
@@ -209,8 +209,8 @@ describe('alt.koopon.exportacao-csv', function() {
 
           var _arquivoContabil = false;
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
-          var _parser = new _AltKooponExportacaoParser(_m);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
@@ -241,8 +241,8 @@ describe('alt.koopon.exportacao-csv', function() {
 
           var _arquivoContabil = false;
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
-          var _parser = new _AltKooponExportacaoParser(_m);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
@@ -274,8 +274,8 @@ describe('alt.koopon.exportacao-csv', function() {
 
           var _arquivoContabil = false;
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
-          var _parser = new _AltKooponExportacaoParser(_m);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
@@ -301,9 +301,9 @@ describe('alt.koopon.exportacao-csv', function() {
 
           var _arquivoContabil = true;
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil);
 
-          var _parser = new _AltKooponExportacaoParser(_m);
+          var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
@@ -335,9 +335,9 @@ describe('alt.koopon.exportacao-csv', function() {
 
           var _arquivoContabil = true;
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
 
-          var _parser = new _AltKooponExportacaoParser(_m);
+          var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
@@ -363,9 +363,9 @@ describe('alt.koopon.exportacao-csv', function() {
 
           var _arquivoContabil = true;
 
-          var _m = new _AltKooponExportacaoModel(_titulos, _propriedades, _info, _arquivoContabil);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil);
 
-          var _parser = new _AltKooponExportacaoParser(_m);
+          var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
@@ -373,16 +373,16 @@ describe('alt.koopon.exportacao-csv', function() {
       });
     });
 
-    describe('AltKooponExportacaoExec', function() {
+    describe('AltExportacaoTextoExec', function() {
       describe('criação', function() {
         it('deve retornar uma function', function() {
-          expect(typeof _AltKooponExportacaoExec).toBe('function');
+          expect(typeof _AltExportacaoTextoExec).toBe('function');
         });
 
         it('deve ter document com o que é passado por parâmetro', function() {
           var _doc = {a: 1};
 
-          var _exec = new _AltKooponExportacaoExec(_doc);
+          var _exec = new _AltExportacaoTextoExec(_doc);
 
           expect(_exec.document).toEqual(_doc);
         });
@@ -419,7 +419,7 @@ describe('alt.koopon.exportacao-csv', function() {
           spyOn(_fakeDocument.body, 'removeChild').and.callThrough();
           spyOn(_a, 'click').and.callThrough();
 
-          var _exec = new _AltKooponExportacaoExec(_fakeDocument);
+          var _exec = new _AltExportacaoTextoExec(_fakeDocument);
 
           _exec.exporta(_info, _nomeArquivo, _tipoArquivo);
 
