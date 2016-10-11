@@ -107,7 +107,7 @@ describe('alt.exportacao-texto', function() {
       });
 
       describe('parseArquivo', function() {
-        it('deve fazer o parse corretamente - sem titulos e não é arquivo contábil, com valores vazios', function() {
+        it('deve fazer o parse corretamente - sem titulos e não é arquivo contábil, com valores vazios - todos devem ter aspas', function() {
           var _titulos = undefined;
 
           var _propriedades = [
@@ -120,7 +120,7 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9, d: 'abc123'},
           ];
 
-          var _resposta = '1,2,3,""%0A4,5,6,""%0A7,8,9,abc123';
+          var _resposta = '"1","2","3",""%0A"4","5","6",""%0A"7","8","9","abc123"';
 
           var _arquivoContabil = false;
 
@@ -145,7 +145,7 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9},
           ];
 
-          var _resposta = '1,2,3%0A4,5,6%0A7,8,9';
+          var _resposta = '"1","2","3"%0A"4","5","6"%0A"7","8","9"';
 
           var _arquivoContabil = false;
 
@@ -172,7 +172,7 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9},
           ];
 
-          var _resposta = 'Coluna%20A,Coluna%20B,Coluna%20C%0A1,2,3%0A4,5,6%0A7,8,9';
+          var _resposta = 'Coluna%20A,Coluna%20B,Coluna%20C%0A"1","2","3"%0A"4","5","6"%0A"7","8","9"';
 
           var _arquivoContabil = false;
 
@@ -205,7 +205,7 @@ describe('alt.exportacao-texto', function() {
             ['123456']
           ];
 
-          var _resposta = 'ae1%0Aae2%0A123456%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C%0A1,2,3%0A4,5,6%0A7,8,9';
+          var _resposta = 'ae1%0Aae2%0A123456%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C%0A"1","2","3"%0A"4","5","6"%0A"7","8","9"';
 
           var _arquivoContabil = false;
 
@@ -237,7 +237,40 @@ describe('alt.exportacao-texto', function() {
             ['123456']
           ];
 
-          var _resposta = 'ae1%0Aae2%0A123456%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C,Coluna%20D%0A1,2,3,"a,b,c,d"%0A4,5,6,"e,f,g,h"%0A7,8,9,"i,j,k,l"';
+          var _resposta = 'ae1%0Aae2%0A123456%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C,Coluna%20D%0A"1","2","3","a,b,c,d"%0A"4","5","6","e,f,g,h"%0A"7","8","9","i,j,k,l"';
+
+          var _arquivoContabil = false;
+
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _parser = new _AltExportacaoTextoParser(_m);
+          var _resultadoParsed = _parser.parseArquivo();
+
+          expect(_resultadoParsed).toEqual(_resposta);
+        });
+        
+        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil, tem informações que não são tabeladas e tem valores com vírgula e valores monetários', function() {
+          var _titulos = [
+            'Coluna A', 'Coluna B', 'Coluna C', 'Coluna D', 'Coluna E'
+          ];
+
+          var _propriedades = [
+            'a', 'b', 'c', 'd', 'e'
+          ];
+
+          var _info = [
+            {a: 1, b: 2, c: 3, d: 'a,b,c,d', e: 1.11},
+            {a: 4, b: 5, c: 6, d: 'e,f,g,h', e: 2.22},
+            {a: 7, b: 8, c: 9, d: 'i,j,k,l', e: 3.33},
+          ];
+
+          var _infoNaoTabelada = [
+            ['ae1'],
+            ['ae2'],
+            ['123456'],
+            ['xyz']
+          ];
+
+          var _resposta = 'ae1%0Aae2%0A123456%0Axyz%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C,Coluna%20D,Coluna%20E%0A"1","2","3","a,b,c,d","1,11"%0A"4","5","6","e,f,g,h","2,22"%0A"7","8","9","i,j,k,l","3,33"';
 
           var _arquivoContabil = false;
 
@@ -270,7 +303,7 @@ describe('alt.exportacao-texto', function() {
             ['wtf, yo, :D!']
           ];
 
-          var _resposta = 'ae1%0Aae2%0A123456%0A"wtf,%20yo,%20:D!"%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C,Coluna%20D%0A1,2,3,"a,b,c,d"%0A4,5,6,"e,f,g,h"%0A7,8,9,"i,j,k,l"';
+          var _resposta = 'ae1%0Aae2%0A123456%0A"wtf,%20yo,%20:D!"%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C,Coluna%20D%0A"1","2","3","a,b,c,d"%0A"4","5","6","e,f,g,h"%0A"7","8","9","i,j,k,l"';
 
           var _arquivoContabil = false;
 

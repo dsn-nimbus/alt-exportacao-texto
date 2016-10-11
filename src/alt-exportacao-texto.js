@@ -31,6 +31,7 @@
       var _arquivoContabil = !!this.expModelo.arquivoContabil;
       var _listagemFinal = [];
       var VALOR_MONETARIO_PATTERN = /\d+\.\d{1,2}/;
+      var NUMERO_PATTERN = /\d/;
       var FIM_DE_LINHA_CODIFICADO = '%0A';
       var ESPACO_STRING_CODIFICADO = '%20';
 
@@ -72,8 +73,10 @@
                 }
               }
               else {
-                  if (/,/g.test(_valor)) {
-                      _valor = "\""+_valor+"\"";
+                  if (NUMERO_PATTERN.test(_valor)) {
+                    _valor = "\"" + String(_valor).replace(".", ",") + "\"";
+                  } else {
+                    _valor = "\""+_valor+"\"";                    
                   }
               }
             }
@@ -115,38 +118,41 @@
 
     return AltExportacaoTextoExec;
   }])
-  .directive('altExportacaoTexto', ['AltExportacaoTextoModel', 'AltExportacaoTextoParser', 'AltExportacaoTextoExec', function(AltExportacaoTextoModel, AltExportacaoTextoParser, AltExportacaoTextoExec) {
-    var _restrict = 'A';
+  .directive('altExportacaoTexto', [
+    'AltExportacaoTextoModel', 
+    'AltExportacaoTextoParser', 
+    'AltExportacaoTextoExec', 
+    function(AltExportacaoTextoModel, AltExportacaoTextoParser, AltExportacaoTextoExec) {
+      var _restrict = 'A';
 
-    var _link = function(scope, element, attrs) {
-      var _parser = null;
-      var _modelo = null;
-      var _exec = new AltExportacaoTextoExec(document);
+      var _link = function(scope, element, attrs) {
+        var _parser = null;
+        var _modelo = null;
+        var _exec = new AltExportacaoTextoExec(document);
 
-      element.on('click', function() {
-        var _tipoArquivo = scope.tipoArquivo || 'csv';
-        var _nomeArquivo = scope.nomeArquivo || 'Exportação';
-        var _info = scope.preparaInfo();
+        element.on('click', function() {
+          var _tipoArquivo = scope.tipoArquivo || 'csv';
+          var _nomeArquivo = scope.nomeArquivo || 'Exportação';
+          var _info = scope.preparaInfo();
 
-        _modelo = new AltExportacaoTextoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil, _info.infoNaoTabelada);
-        _parser = new AltExportacaoTextoParser(_modelo);
+          _modelo = new AltExportacaoTextoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil, _info.infoNaoTabelada);
+          _parser = new AltExportacaoTextoParser(_modelo);
 
-        _exec.exporta(_parser.parseArquivo(), _nomeArquivo, _tipoArquivo);
-      });
-    };
+          _exec.exporta(_parser.parseArquivo(), _nomeArquivo, _tipoArquivo);
+        });
+      };
 
-    var _scope = {
-      nomeArquivo: '@',
-      tipoArquivo: '@',
-      arquivoContabil: '@',
-      preparaInfo: '&'
-    };
+      var _scope = {
+        nomeArquivo: '@',
+        tipoArquivo: '@',
+        arquivoContabil: '@',
+        preparaInfo: '&'
+      };
 
-    return {
-      restrict: _restrict,
-      link: _link,
-      scope: _scope
-    };
-
+      return {
+        restrict: _restrict,
+        link: _link,
+        scope: _scope
+      };
   }]);
 }(window.angular))
