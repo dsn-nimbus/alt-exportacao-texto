@@ -76,7 +76,7 @@
                   if (NUMERO_PATTERN.test(_valor)) {
                     _valor = "\"" + String(_valor).replace(".", ",") + "\"";
                   } else {
-                    _valor = "\""+_valor+"\"";                    
+                    _valor = "\""+_valor+"\"";
                   }
               }
             }
@@ -110,49 +110,41 @@
       _a.download = nomeArquivo;
 
       this.document.body.appendChild(_a);
-
       _a.click();
-
       this.document.body.removeChild(_a);
     };
 
     return AltExportacaoTextoExec;
   }])
   .directive('altExportacaoTexto', [
-    'AltExportacaoTextoModel', 
-    'AltExportacaoTextoParser', 
-    'AltExportacaoTextoExec', 
+    'AltExportacaoTextoModel',
+    'AltExportacaoTextoParser',
+    'AltExportacaoTextoExec',
     function(AltExportacaoTextoModel, AltExportacaoTextoParser, AltExportacaoTextoExec) {
-      var _restrict = 'A';
-
-      var _link = function(scope, element, attrs) {
-        var _parser = null;
-        var _modelo = null;
-        var _exec = new AltExportacaoTextoExec(document);
-
-        element.on('click', function() {
-          var _tipoArquivo = scope.tipoArquivo || 'csv';
-          var _nomeArquivo = scope.nomeArquivo || 'Exportação';
-          var _info = scope.preparaInfo();
-
-          _modelo = new AltExportacaoTextoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil, _info.infoNaoTabelada);
-          _parser = new AltExportacaoTextoParser(_modelo);
-
-          _exec.exporta(_parser.parseArquivo(), _nomeArquivo, _tipoArquivo);
-        });
-      };
-
-      var _scope = {
-        nomeArquivo: '@',
-        tipoArquivo: '@',
-        arquivoContabil: '@',
-        preparaInfo: '&'
-      };
-
       return {
-        restrict: _restrict,
-        link: _link,
-        scope: _scope
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+          var _parser = null;
+          var _modelo = null;
+          var _exec = new AltExportacaoTextoExec(document);
+
+          element.on('click', function() {
+            var _tipoArquivo = scope.tipoArquivo || 'csv';
+            var _nomeArquivo = scope.nomeArquivo || 'Exportação';
+            var _info = scope.preparaInfo();
+
+            _modelo = new AltExportacaoTextoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil, _info.infoNaoTabelada);
+            _parser = new AltExportacaoTextoParser(_modelo);
+
+            _exec.exporta(_parser.parseArquivo(), _nomeArquivo, _tipoArquivo);
+          });
+        },
+        scope: {
+          nomeArquivo: '@',
+          tipoArquivo: '@',
+          arquivoContabil: '@',
+          preparaInfo: '&'
+        }
       };
   }]);
 }(window.angular))
