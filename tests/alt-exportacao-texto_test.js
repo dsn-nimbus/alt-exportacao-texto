@@ -247,7 +247,7 @@ describe('alt.exportacao-texto', function() {
 
           expect(_resultadoParsed).toEqual(_resposta);
         });
-        
+
         it('deve fazer o parse corretamente - com titulos, não é arquivo contábil, tem informações que não são tabeladas e tem valores com vírgula e valores monetários', function() {
           var _titulos = [
             'Coluna A', 'Coluna B', 'Coluna C', 'Coluna D', 'Coluna E'
@@ -424,23 +424,17 @@ describe('alt.exportacao-texto', function() {
       describe('exporta', function() {
         it('deve adicionar os valores corretos ao elemento a', function() {
           var _a = {
-              click: function() {
-
-              }
+              click: angular.noop
           };
 
           var _fakeDocument = {
             body: {
-              removeChild: function() {
-
-              },
-              appendChild: function() {
-
-              }
+              removeChild: angular.noop,
+              appendChild: angular.noop
             },
             createElement: function() {
               return _a;
-              }
+            }
           };
 
           var _info = '{"a": 1}';
