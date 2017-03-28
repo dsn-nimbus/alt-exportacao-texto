@@ -20,8 +20,9 @@ describe('alt.exportacao-texto', function() {
         _scope.cb = function() {};
         _scope.n = 'nome.123.csv';
         _scope.t = 'txt';
+        _scope.s = '|';
 
-        var _html = '<div alt-exportacao-texto prepara-info="cb()" nome-arquivo="{{n}}" tipo-arquivo="{{t}}"></div>';
+        var _html = '<div alt-exportacao-texto prepara-info="cb()" nome-arquivo="{{n}}" tipo-arquivo="{{t}}" separador="{{s}}"></div>';
 
         _element = angular.element(_html);
         _compile(_element)(_scope);
@@ -37,6 +38,7 @@ describe('alt.exportacao-texto', function() {
         expect(typeof _element.isolateScope().preparaInfo).toEqual("function");
         expect(_element.isolateScope().nomeArquivo).toEqual(_scope.n);
         expect(_element.isolateScope().tipoArquivo).toEqual(_scope.t);
+        expect(_element.isolateScope().separador).toEqual(_scope.s);
       });
     });
 
