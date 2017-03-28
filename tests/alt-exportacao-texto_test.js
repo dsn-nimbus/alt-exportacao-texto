@@ -86,13 +86,13 @@ describe('alt.exportacao-texto', function() {
           var _propriedades = ['a', 'b'];
           var _info = 'abc';
           var _arquivoContabil = true;
-          var _infoNaoTabelada = [4, 5, 6];
+          var _separador = '|';
 
-          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _separador);
 
           expect(_m.titulos).toEqual(_titulos);
-          expect(_m.infoNaoTabelada).toEqual(_infoNaoTabelada);
           expect(_m.propriedades).toEqual(_propriedades);
+          expect(_m.separador).toEqual(_separador);
           expect(_m.info).toEqual(_info);
           expect(_m.arquivoContabil).toEqual(_arquivoContabil);
         });
@@ -120,7 +120,7 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9, d: 'abc123'},
           ];
 
-          var _resposta = '"1","2","3",""%0A"4","5","6",""%0A"7","8","9","abc123"';
+          var _resposta = '"1";"2";"3";""%0A"4";"5";"6";""%0A"7";"8";"9";"abc123"';
 
           var _arquivoContabil = false;
 
@@ -145,7 +145,7 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9},
           ];
 
-          var _resposta = '"1","2","3"%0A"4","5","6"%0A"7","8","9"';
+          var _resposta = '"1";"2";"3"%0A"4";"5";"6"%0A"7";"8";"9"';
 
           var _arquivoContabil = false;
 
@@ -172,7 +172,7 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9},
           ];
 
-          var _resposta = 'Coluna%20A,Coluna%20B,Coluna%20C%0A"1","2","3"%0A"4","5","6"%0A"7","8","9"';
+          var _resposta = 'Coluna%20A;Coluna%20B;Coluna%20C%0A"1";"2";"3"%0A"4";"5";"6"%0A"7";"8";"9"';
 
           var _arquivoContabil = false;
 
@@ -184,7 +184,7 @@ describe('alt.exportacao-texto', function() {
           expect(_resultadoParsed).toEqual(_resposta);
         });
 
-        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil e tem informações que não são tabeladas', function() {
+        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil e tem separador diferente de ;', function() {
           var _titulos = [
             'Coluna A', 'Coluna B', 'Coluna C'
           ];
@@ -199,24 +199,20 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9},
           ];
 
-          var _infoNaoTabelada = [
-            ['ae1'],
-            ['ae2'],
-            ['123456']
-          ];
+          var _separador = '|';
 
-          var _resposta = 'ae1%0Aae2%0A123456%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C%0A"1","2","3"%0A"4","5","6"%0A"7","8","9"';
+          var _resposta = 'Coluna%20A|Coluna%20B|Coluna%20C%0A"1"|"2"|"3"%0A"4"|"5"|"6"%0A"7"|"8"|"9"';
 
           var _arquivoContabil = false;
 
-          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _separador);
           var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
         });
 
-        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil, tem informações que não são tabeladas e tem valores com vírgula', function() {
+        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil, tem separador diferente de ; e tem valores com vírgula', function() {
           var _titulos = [
             'Coluna A', 'Coluna B', 'Coluna C', 'Coluna D'
           ];
@@ -231,24 +227,20 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9, d: 'i,j,k,l'},
           ];
 
-          var _infoNaoTabelada = [
-            ['ae1'],
-            ['ae2'],
-            ['123456']
-          ];
+          var _separador = '|';
 
-          var _resposta = 'ae1%0Aae2%0A123456%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C,Coluna%20D%0A"1","2","3","a,b,c,d"%0A"4","5","6","e,f,g,h"%0A"7","8","9","i,j,k,l"';
+          var _resposta = 'Coluna%20A|Coluna%20B|Coluna%20C|Coluna%20D%0A"1"|"2"|"3"|"a,b,c,d"%0A"4"|"5"|"6"|"e,f,g,h"%0A"7"|"8"|"9"|"i,j,k,l"';
 
           var _arquivoContabil = false;
 
-          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _separador);
           var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
         });
 
-        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil, tem informações que não são tabeladas e tem valores com vírgula e valores monetários', function() {
+        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil, tem informações o seperador default (;) e tem valores com vírgula e valores monetários', function() {
           var _titulos = [
             'Coluna A', 'Coluna B', 'Coluna C', 'Coluna D', 'Coluna E'
           ];
@@ -263,25 +255,18 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9, d: 'i,j,k,l', e: 3.33},
           ];
 
-          var _infoNaoTabelada = [
-            ['ae1'],
-            ['ae2'],
-            ['123456'],
-            ['xyz']
-          ];
-
-          var _resposta = 'ae1%0Aae2%0A123456%0Axyz%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C,Coluna%20D,Coluna%20E%0A"1","2","3","a,b,c,d","1,11"%0A"4","5","6","e,f,g,h","2,22"%0A"7","8","9","i,j,k,l","3,33"';
+          var _resposta = 'Coluna%20A;Coluna%20B;Coluna%20C;Coluna%20D;Coluna%20E%0A"1";"2";"3";"a,b,c,d";"1,11"%0A"4";"5";"6";"e,f,g,h";"2,22"%0A"7";"8";"9";"i,j,k,l";"3,33"';
 
           var _arquivoContabil = false;
 
-          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil);
           var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
           expect(_resultadoParsed).toEqual(_resposta);
         });
 
-        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil, tem informações que não são tabeladas e tem valores com vírgula nas informacoesNaoTabeladas e nos valores tambem', function() {
+        it('deve fazer o parse corretamente - com titulos, não é arquivo contábil, tem separador por vírgula e tem valores com vírgula nas informacoesNaoTabeladas e nos valores tambem', function() {
           var _titulos = [
             'Coluna A', 'Coluna B', 'Coluna C', 'Coluna D'
           ];
@@ -296,18 +281,13 @@ describe('alt.exportacao-texto', function() {
             {a: 7, b: 8, c: 9, d: 'i,j,k,l'},
           ];
 
-          var _infoNaoTabelada = [
-            ['ae1'],
-            ['ae2'],
-            ['123456'],
-            ['wtf, yo, :D!']
-          ];
+          var _separador = ',';
 
-          var _resposta = 'ae1%0Aae2%0A123456%0A"wtf,%20yo,%20:D!"%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C,Coluna%20D%0A"1","2","3","a,b,c,d"%0A"4","5","6","e,f,g,h"%0A"7","8","9","i,j,k,l"';
+          var _resposta = 'Coluna%20A,Coluna%20B,Coluna%20C,Coluna%20D%0A"1","2","3","a,b,c,d"%0A"4","5","6","e,f,g,h"%0A"7","8","9","i,j,k,l"';
 
           var _arquivoContabil = false;
 
-          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _separador);
           var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
 
@@ -330,7 +310,7 @@ describe('alt.exportacao-texto', function() {
             {a: 10, b: 11, c: 12, valor: '1000.99'},
           ];
 
-          var _resposta = 'Coluna%20A,Coluna%20B,Coluna%20C%0A"1","2","3","1,99"%0A"4","5","6","1,9"%0A"7","8","9","0,99"%0A"10","11","12","1000,99"';
+          var _resposta = 'Coluna%20A;Coluna%20B;Coluna%20C%0A"1";"2";"3";"1,99"%0A"4";"5";"6";"1,9"%0A"7";"8";"9";"0,99"%0A"10";"11";"12";"1000,99"';
 
           var _arquivoContabil = true;
 
@@ -342,16 +322,12 @@ describe('alt.exportacao-texto', function() {
           expect(_resultadoParsed).toEqual(_resposta);
         });
 
-        it('deve fazer o parse corretamente - com titulos, é arquivo contábil e tem informações não tabeladas', function() {
+        it('deve fazer o parse corretamente - com titulos, é arquivo contábil e tem separador diferente', function() {
           var _titulos = [
             'Coluna A', 'Coluna B', 'Coluna C'
           ];
 
-          var _infoNaoTabelada = [
-            ['ae999'],
-            ['ae8888'],
-            ['yo:D']
-          ]
+          var _separador = '|'
 
           var _propriedades = [
             'a', 'b', 'c', 'valor'
@@ -364,11 +340,11 @@ describe('alt.exportacao-texto', function() {
             {a: 10, b: 11, c: 12, valor: '1000.99'},
           ];
 
-          var _resposta = 'ae999%0Aae8888%0Ayo:D%0A%0A%0A%0AColuna%20A,Coluna%20B,Coluna%20C%0A"1","2","3","1,99"%0A"4","5","6","1,9"%0A"7","8","9","0,99"%0A"10","11","12","1000,99"';
+          var _resposta = 'Coluna%20A|Coluna%20B|Coluna%20C%0A"1"|"2"|"3"|"1,99"%0A"4"|"5"|"6"|"1,9"%0A"7"|"8"|"9"|"0,99"%0A"10"|"11"|"12"|"1000,99"';
 
           var _arquivoContabil = true;
 
-          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _infoNaoTabelada);
+          var _m = new _AltExportacaoTextoModel(_titulos, _propriedades, _info, _arquivoContabil, _separador);
 
           var _parser = new _AltExportacaoTextoParser(_m);
           var _resultadoParsed = _parser.parseArquivo();
@@ -392,7 +368,7 @@ describe('alt.exportacao-texto', function() {
             {a: 10, b: 11, c: 12, valor: '1000.99', outraInfo: 'itaú 1.1'}
           ];
 
-          var _resposta = 'Coluna%20A,Coluna%20B,Coluna%20C,Coluna%20D%0A"1","2","3","1,99","1.88"%0A"4","5","6","1,9","777"%0A"7","8","9","0,99","5.77"%0A"10","11","12","1000,99","itaú%201.1"';
+          var _resposta = 'Coluna%20A;Coluna%20B;Coluna%20C;Coluna%20D%0A"1";"2";"3";"1,99";"1.88"%0A"4";"5";"6";"1,9";"777"%0A"7";"8";"9";"0,99";"5.77"%0A"10";"11";"12";"1000,99";"itaú%201.1"';
 
           var _arquivoContabil = true;
 

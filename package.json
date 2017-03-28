@@ -1,6 +1,6 @@
 {
   "name": "alt-exportacao-texto",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "main": "dist/alt-exportacao-texto.min.js",
   "scripts": {
     "build": "gulp build",
@@ -15,16 +15,11 @@
     "gulp-cssmin": "^0.1.7",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.2.0",
-    "jasmine-core": "^2.3.0",
-    "karma": "^0.12.31",
-    "karma-chrome-launcher": "^0.1.8",
-    "karma-coverage": "^0.3.1",
-    "karma-firefox-launcher": "^0.1.4",
-    "karma-ie-launcher": "^0.1.5",
-    "karma-jasmine": "^0.3.5",
-    "karma-opera-launcher": "^0.1.0",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "karma-safari-launcher": "^0.1.1"
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.5.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-coverage": "^1.1.1",
+    "karma-jasmine": "^1.1.0"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,7 @@
 {
   "name": "alt-exportacao-texto",
   "main": "dist/alt-exportacao-texto.min.js",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "homepage": "https://github.com/dsn-nimbus/alt-exportacao-texto.git",
   "authors": [
     "dsn-nimbus <ericdantas0@gmail.com>"

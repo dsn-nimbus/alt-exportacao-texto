@@ -3,9 +3,9 @@
 
   ng.module('alt.exportacao-texto', [])
   .factory('AltExportacaoTextoModel', [function() {
-    var AltExportacaoTextoModel = function(titulos, propriedades, info, arquivoContabil, infoNaoTabelada) {
+    var AltExportacaoTextoModel = function(titulos, propriedades, info, arquivoContabil, separador) {
       this.titulos = titulos || undefined;
-      this.infoNaoTabelada = infoNaoTabelada || undefined;
+      this.separador = separador || ';';
       this.propriedades = propriedades || [];
       this.info = info || [];
       this.arquivoContabil = arquivoContabil || false;
@@ -25,30 +25,15 @@
     AltExportacaoTextoParser.prototype.parseArquivo = function() {
       var _matriz = [];
       var _titulos = this.expModelo.titulos;
-      var _infoNaoTabelada = this.expModelo.infoNaoTabelada;
       var _propriedades = this.expModelo.propriedades;
       var _listagem = this.expModelo.info;
+      var _separador = this.expModelo.separador;
       var _arquivoContabil = !!this.expModelo.arquivoContabil;
       var _listagemFinal = [];
       var VALOR_MONETARIO_PATTERN = /\d+\.\d{1,2}/;
       var NUMERO_PATTERN = /\d/;
       var FIM_DE_LINHA_CODIFICADO = '%0A';
       var ESPACO_STRING_CODIFICADO = '%20';
-
-      if (_infoNaoTabelada) {
-        _infoNaoTabelada.forEach(function(inf) {
-          inf.forEach(function(str, indice) {
-            if (/,/g.test(str)) {
-              inf[indice] = "\""+str+"\"";
-            }
-          });
-
-          _matriz.push(inf);
-        });
-
-        // espaçamento entre a informação não tabelada e a tabela
-        _matriz.push([''], [''], ['']);
-      }
 
       if (_titulos) {
         _matriz.push(_titulos);
@@ -89,7 +74,7 @@
       });
 
       ng.forEach(_matriz, function(linha, indice) {
-        _listagemFinal.push(linha.join(','));
+        _listagemFinal.push(linha.join(_separador));
       });
 
       return _listagemFinal.join(FIM_DE_LINHA_CODIFICADO).replace(/ /g, ESPACO_STRING_CODIFICADO);
@@ -133,7 +118,7 @@
             var _nomeArquivo = scope.nomeArquivo || 'Exportação';
             var _info = scope.preparaInfo();
 
-            _modelo = new AltExportacaoTextoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil, _info.infoNaoTabelada);
+            _modelo = new AltExportacaoTextoModel(_info.titulos, _info.propriedades, _info.info, scope.arquivoContabil, scope.separador);
             _parser = new AltExportacaoTextoParser(_modelo);
 
             _exec.exporta(_parser.parseArquivo(), _nomeArquivo, _tipoArquivo);
@@ -143,6 +128,7 @@
           nomeArquivo: '@',
           tipoArquivo: '@',
           arquivoContabil: '@',
+          separador: '@',
           preparaInfo: '&'
         }
       };
