@@ -5,7 +5,7 @@
   .factory('AltExportacaoTextoModel', [function() {
     var AltExportacaoTextoModel = function(titulos, propriedades, info, arquivoContabil, separador) {
       this.titulos = titulos || undefined;
-      this.separador = separador || ';';
+      this.separador = separador || ',';
       this.propriedades = propriedades || [];
       this.info = info || [];
       this.arquivoContabil = arquivoContabil || false;
@@ -32,8 +32,7 @@
       var _listagemFinal = [];
       var VALOR_MONETARIO_PATTERN = /\d+\.\d{1,2}/;
       var NUMERO_PATTERN = /\d/;
-      var FIM_DE_LINHA_CODIFICADO = '%0A';
-      var ESPACO_STRING_CODIFICADO = '%20';
+      var FIM_DE_LINHA_CODIFICADO = '\r\n';
 
       if (_titulos) {
         _matriz.push(_titulos);
@@ -77,7 +76,7 @@
         _listagemFinal.push(linha.join(_separador));
       });
 
-      return _listagemFinal.join(FIM_DE_LINHA_CODIFICADO).replace(/ /g, ESPACO_STRING_CODIFICADO);
+      return _listagemFinal.join(FIM_DE_LINHA_CODIFICADO);
     };
 
     return AltExportacaoTextoParser;
@@ -90,7 +89,7 @@
     AltExportacaoTextoExec.prototype.exporta = function(info, nomeArquivo, tipoArquivo) {
       var _a = this.document.createElement('a');
 
-      _a.href = 'data:attachment/' + tipoArquivo + ';charset=utf-8,%EF%BB%BF' + info;
+      _a.href = 'data:attachment/' + tipoArquivo + ';charset=utf-8,%EF%BB%BF' + encodeURIComponent(info);
       _a.target = '_blank';
       _a.download = nomeArquivo;
 

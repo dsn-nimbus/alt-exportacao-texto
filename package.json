@@ -1,6 +1,6 @@
 {
   "name": "alt-exportacao-texto",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "main": "dist/alt-exportacao-texto.min.js",
   "scripts": {
     "build": "gulp build",
